@@ -8,7 +8,10 @@ import layout from './layout';
 import control from './control';
 import './control/index';
 import controlCustom from './control/custom';
-import {defaultI18n} from './config';
+import {
+  defaultI18n
+}
+from './config';
 
 /**
  * FormRender Class
@@ -39,8 +42,7 @@ class FormRender {
         selectColor: 'Select Color',
         invalidControl: 'Invalid control',
       },
-      onRender: () => {
-      },
+      onRender: () => {},
       render: true,
       templates: {}, // custom inline defined templates
       notify: {
@@ -74,7 +76,8 @@ class FormRender {
 
       // if the user hasn't passed a pre-parsed formData object, parse it according to the specified dataType
       if (typeof this.options.formData !== 'object') {
-        this.options.formData = setData[this.options.dataType](this.options.formData) || false;
+        this.options.formData = setData[this.options.dataType](this.options.formData) ||
+          false;
       }
     })();
 
@@ -181,7 +184,7 @@ class FormRender {
           // perhaps a better approach is to create an empty wrapper div, append it to the container, and set the new wrapper as the element
           // then remove the 'else if' & empty the element + appendFormFields.
           let renderedFormWrap = utils.markup('div', rendered, {
-            className: 'rendered-form'
+            className: 'rendered-form main-form-builder'
           });
           if (opts.container instanceof jQuery) {
             opts.container = opts.container[0];
@@ -219,7 +222,9 @@ class FormRender {
     let opts = this.options;
     let fieldData = opts.formData;
     if (!fieldData || Array.isArray(fieldData)) {
-      throw new Error('To render a single element, please specify a single object of formData for the field in question');
+      throw new Error(
+        'To render a single element, please specify a single object of formData for the field in question'
+      );
     }
     let sanitizedField = this.santizeField(fieldData);
 

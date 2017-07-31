@@ -1,16 +1,23 @@
 import 'babel-regenerator-runtime';
 import '../sass/form-builder.scss';
 import Dom from './dom';
-import {remove} from './dom';
+import {
+  remove
+}
+from './dom';
 import {
   Data
-} from './data';
+}
+from './data';
 import mi18n from 'mi18n';
 import utils from './utils';
 import events from './events';
 import layout from './layout';
 import Helpers from './helpers';
-import {defaultOptions, defaultI18n, config, styles} from './config';
+import {
+  defaultOptions, defaultI18n, config, styles
+}
+from './config';
 import control from './control';
 import './control/index';
 import controlCustom from './control/custom';
@@ -95,7 +102,8 @@ const FormBuilder = function(opts, element) {
     }
     let icon = custom.icon || controlClass.icon(type);
     let label = custom.label || controlClass.label(type);
-    let iconClassName = !icon ? custom.iconClassName || `icon-${type.replace(/-[\d]{4}$/, '')}` : '';
+    let iconClassName = !icon ? custom.iconClassName ||
+      `icon-${type.replace(/-[\d]{4}$/, '')}` : '';
 
     // if the class has specified a custom icon, inject it into the label
     if (icon) {
@@ -104,8 +112,9 @@ const FormBuilder = function(opts, element) {
 
     // build & insert the new list item to represent this control
     let newFieldControl = m('li',
-      m('span', label),
-      {className: `${iconClassName} input-control input-control-${i}`}
+      m('span', label), {
+        className: `${iconClassName} input-control input-control-${i}`
+      }
     );
     newFieldControl.dataset.type = type;
     controlList.push(type);
@@ -183,7 +192,8 @@ const FormBuilder = function(opts, element) {
   let processControl = control => {
     if (control[0].classList.contains('input-set-control')) {
       let inputSets = [];
-      let inputSet = opts.inputSets.find(set => (set.name === control[0].dataset.type));
+      let inputSet = opts.inputSets.find(set => (set.name === control[0].dataset
+        .type));
       if (inputSet && inputSet.showHeader) {
         let header = {
           type: 'header',
@@ -207,7 +217,7 @@ const FormBuilder = function(opts, element) {
 
   d.editorWrap = m('div', null, {
     id: `${data.formID}-form-wrap`,
-    className: 'form-wrap form-builder' + utils.mobileClass()
+    className: 'form-wrap main-form-builder form-builder' + utils.mobileClass()
   });
 
   let $editorWrap = $(d.editorWrap);
@@ -219,7 +229,8 @@ const FormBuilder = function(opts, element) {
 
   if (opts.showActionButtons) {
     const buttons = opts.actionButtons.map(btnData => {
-      if (btnData.id && opts.disabledActionButtons.indexOf(btnData.id) === -1) {
+      if (btnData.id && opts.disabledActionButtons.indexOf(btnData.id) ===
+        -1) {
         return h.processActionButtons(btnData);
       }
     });
@@ -275,9 +286,9 @@ const FormBuilder = function(opts, element) {
   let nonEditableFields = () => {
     let cancelArray = [];
     const disabledField = type =>
-    utils.markup('li', opts[type], {
-      className: `disabled-field form-${type}`
-    });
+      utils.markup('li', opts[type], {
+        className: `disabled-field form-${type}`
+      });
 
     if (opts.prepend && !$('.disabled-field.form-prepend', d.stage).length) {
       cancelArray.push(true);
@@ -334,14 +345,14 @@ const FormBuilder = function(opts, element) {
       field.name = utils.nameAttr(field);
     }
 
-    if (isNew && utils.inArray(field.type,
-      ['text',
-       'number',
-       'file',
-       'date',
-       'select',
-       'textarea',
-       'autocomplete'])) {
+    if (isNew && utils.inArray(field.type, ['text',
+      'number',
+      'file',
+      'date',
+      'select',
+      'textarea',
+      'autocomplete'
+    ])) {
       field.className = field.className || 'form-control';
     }
 
@@ -391,18 +402,22 @@ const FormBuilder = function(opts, element) {
    * @return {String} field options markup
    */
   let fieldOptions = function(fieldData) {
-    let {type, values, name} = fieldData;
+    let {
+      type, values, name
+    } = fieldData;
     let optionActions = [
-        utils.markup('a', i18n.addOption, {className: 'add add-opt'})
-      ];
+      utils.markup('a', i18n.addOption, {
+        className: 'add add-opt'
+      })
+    ];
     let fieldOptions = [
       `<label class="false-label">${i18n.selectOptions}</label>`
     ];
     const isMultiple = fieldData.multiple || (type === 'checkbox-group');
     const optionDataTemplate = label => {
       let optionData = {
-          label,
-          value: utils.hyphenCase(label)
+        label,
+        value: utils.hyphenCase(label)
       };
 
       if (type !== 'autocomplete') {
@@ -422,27 +437,31 @@ const FormBuilder = function(opts, element) {
         return optionDataTemplate(label);
       });
 
-    let firstOption = values[0];
+      let firstOption = values[0];
       if (firstOption.hasOwnProperty('selected')) {
         firstOption.selected = true;
       }
     } else {
       // ensure option data is has all required keys
-      values.forEach(option => Object.assign({}, {selected: false}, option));
+      values.forEach(option => Object.assign({}, {
+        selected: false
+      }, option));
     }
 
     fieldOptions.push('<div class="sortable-options-wrap">');
-      fieldOptions.push('<ol class="sortable-options">');
-      utils.forEach(values, i => {
-        fieldOptions.push(selectFieldOptions(name, values[i], isMultiple));
-      });
-      fieldOptions.push('</ol>');
-      fieldOptions.push(utils.markup('div', optionActions, {
-        className: 'option-actions'}).outerHTML);
+    fieldOptions.push('<ol class="sortable-options">');
+    utils.forEach(values, i => {
+      fieldOptions.push(selectFieldOptions(name, values[i], isMultiple));
+    });
+    fieldOptions.push('</ol>');
+    fieldOptions.push(utils.markup('div', optionActions, {
+      className: 'option-actions'
+    }).outerHTML);
     fieldOptions.push('</div>');
 
     return utils.markup('div', fieldOptions.join(''), {
-      className: 'form-group field-options'}).outerHTML;
+      className: 'form-group field-options'
+    }).outerHTML;
   };
 
   const defaultFieldAttrs = type => {
@@ -560,12 +579,16 @@ const FormBuilder = function(opts, element) {
    * @return {String}        markup for advanced fields
    */
   let advFields = values => {
-    let {type} = values;
+    let {
+      type
+    } = values;
     let advFields = [];
     let fieldAttrs = defaultFieldAttrs(type);
     const advFieldMap = {
       required: () => requiredField(values),
-      toggle: () => boolAttribute('toggle', values, {first: i18n.toggle}),
+      toggle: () => boolAttribute('toggle', values, {
+        first: i18n.toggle
+      }),
       inline: () => {
         let labels = {
           first: i18n.inline,
@@ -677,7 +700,8 @@ const FormBuilder = function(opts, element) {
 
     // Append custom attributes as defined in typeUserAttrs option
     if (opts.typeUserAttrs[type]) {
-      let customAttr = processTypeUserAttrs(opts.typeUserAttrs[type], values);
+      let customAttr = processTypeUserAttrs(opts.typeUserAttrs[type],
+        values);
       advFields.push(customAttr);
     }
 
@@ -726,12 +750,12 @@ const FormBuilder = function(opts, element) {
    */
   function inputUserAttrs(name, attrs) {
     let textAttrs = {
-        id: name + '-' + data.lastID,
-        title: attrs.description || attrs.label || name.toUpperCase(),
-        name: name,
-        type: attrs.type || 'text',
-        className: [`fld-${name}`]
-      };
+      id: name + '-' + data.lastID,
+      title: attrs.description || attrs.label || name.toUpperCase(),
+      name: name,
+      type: attrs.type || 'text',
+      className: [`fld-${name}`]
+    };
     let label = `<label for="${textAttrs.id}">${i18n[name]}</label>`;
 
     let optionInputs = [
@@ -758,7 +782,9 @@ const FormBuilder = function(opts, element) {
    */
   function selectUserAttrs(name, fieldData) {
     let optis = Object.keys(fieldData.options).map(val => {
-      let attrs = {value: val};
+      let attrs = {
+        value: val
+      };
       if (val === fieldData.value) {
         attrs.selected = null;
       }
@@ -812,7 +838,9 @@ const FormBuilder = function(opts, element) {
       right.push(labels.content);
     }
 
-    right = m('div', right, {className: 'input-wrap'}).outerHTML;
+    right = m('div', right, {
+      className: 'input-wrap'
+    }).outerHTML;
 
     return m('div', left.concat(right), {
       className: `form-group ${name}-wrap`
@@ -906,14 +934,18 @@ const FormBuilder = function(opts, element) {
       return m('option', optionAttrs.label, optionAttrs);
     });
     let selectAttrs = {
-        id: attribute + '-' + data.lastID,
-        name: attribute,
-        className: `fld-${attribute} form-control`
-      };
+      id: attribute + '-' + data.lastID,
+      name: attribute,
+      className: `fld-${attribute} form-control`
+    };
     let labelText = i18n[attribute] || utils.capitalize(attribute);
-    let label = m('label', labelText, {for: selectAttrs.id});
+    let label = m('label', labelText, {
+      for: selectAttrs.id
+    });
     let select = m('select', selectOptions, selectAttrs);
-    let inputWrap = m('div', select, {className: 'input-wrap'});
+    let inputWrap = m('div', select, {
+      className: 'input-wrap'
+    });
     let attrWrap = m('div', [label, inputWrap], {
       className: `form-group ${selectAttrs.name}-wrap`
     });
@@ -982,12 +1014,14 @@ const FormBuilder = function(opts, element) {
   };
 
   const requiredField = fieldData => {
-    let {type} = fieldData;
+    let {
+      type
+    } = fieldData;
     let noRequire = [
-        'header',
-        'paragraph',
-        'button'
-      ];
+      'header',
+      'paragraph',
+      'button'
+    ];
     let noMake = [];
     let requireField = '';
 
@@ -1008,10 +1042,10 @@ const FormBuilder = function(opts, element) {
     let type = values.type || 'text';
     let label = values.label || i18n[type] || i18n.label;
     let delBtn = m('a', i18n.remove, {
-        id: 'del_' + data.lastID,
-        className: 'del-button btn delete-confirm',
-        title: i18n.removeMessage
-      });
+      id: 'del_' + data.lastID,
+      className: 'del-button btn delete-confirm',
+      title: i18n.removeMessage
+    });
     let toggleBtn = m('a', null, {
       id: data.lastID + '-edit',
       className: 'toggle-form btn icon-pencil',
@@ -1024,7 +1058,9 @@ const FormBuilder = function(opts, element) {
     });
 
     let liContents = m(
-      'div', [toggleBtn, copyBtn, delBtn], {className: 'field-actions'}
+      'div', [toggleBtn, copyBtn, delBtn], {
+        className: 'field-actions'
+      }
     ).outerHTML;
 
     liContents += m('label', utils.parsedHtml(label), {
@@ -1044,24 +1080,30 @@ const FormBuilder = function(opts, element) {
     };
     liContents += `<span ${utils.attrString(descAttrs)}>?</span>`;
 
-    liContents += m('div', '', {className: 'prev-holder'}).outerHTML;
+    liContents += m('div', '', {
+      className: 'prev-holder'
+    }).outerHTML;
     liContents += `<div id="${data.lastID}-holder" class="frm-holder">`;
     liContents += '<div class="form-elements">';
 
     liContents += advFields(values);
-    liContents += m('a', i18n.close, {className: 'close-field'}).outerHTML;
+    liContents += m('a', i18n.close, {
+      className: 'close-field'
+    }).outerHTML;
 
     liContents += '</div>';
     liContents += '</div>';
 
     let field = m('li', liContents, {
-        'class': type + '-field form-field',
-        'type': type,
-        id: data.lastID
-      });
+      'class': type + '-field form-field',
+      'type': type,
+      id: data.lastID
+    });
     let $li = $(field);
 
-    $li.data('fieldData', {attrs: values});
+    $li.data('fieldData', {
+      attrs: values
+    });
 
     if (typeof h.stopIndex !== 'undefined') {
       $('> li', d.stage).eq(h.stopIndex).before($li);
@@ -1070,7 +1112,9 @@ const FormBuilder = function(opts, element) {
     }
 
     $('.sortable-options', $li)
-    .sortable({update: () => h.updatePreview($li)});
+      .sortable({
+        update: () => h.updatePreview($li)
+      });
 
     // generate the control, insert it into the list item & add it to the stage
     h.updatePreview($li);
@@ -1091,15 +1135,19 @@ const FormBuilder = function(opts, element) {
   // Select field html, since there may be multiple
   let selectFieldOptions = function(name, optionData, multipleSelect) {
     let optionInputType = {
-        selected: (multipleSelect ? 'checkbox' : 'radio')
-      };
+      selected: (multipleSelect ? 'checkbox' : 'radio')
+    };
     let optionDataOrder = [
       'value',
       'label',
       'selected'
     ];
     let optionInputs = [];
-    let optionTemplate = {selected: false, label: '', value: ''};
+    let optionTemplate = {
+      selected: false,
+      label: '',
+      value: ''
+    };
 
     optionData = Object.assign(optionTemplate, optionData);
 
@@ -1143,7 +1191,7 @@ const FormBuilder = function(opts, element) {
 
     $('.fld-name', $clone).val(cloneName);
     $clone.find('[id]').each((i, elem) => {
-     elem.id = elem.id.replace(currentId, data.lastID);
+      elem.id = elem.id.replace(currentId, data.lastID);
     });
     $clone.find('[for]').each((index, elem) => {
       let curId = elem.getAttribute('for');
@@ -1218,7 +1266,8 @@ const FormBuilder = function(opts, element) {
     e.stopPropagation();
     e.preventDefault();
     if (e.handled !== true) {
-      let targetID = e.target.tagName == 'li' ? $(e.target).attr('id') : $(e.target).closest('li.form-field').attr('id');
+      let targetID = e.target.tagName == 'li' ? $(e.target).attr('id') : $(
+        e.target).closest('li.form-field').attr('id');
       h.toggleEdit(targetID);
       e.handled = true;
     }
@@ -1230,7 +1279,7 @@ const FormBuilder = function(opts, element) {
     $valWrap.toggle(e.target.value !== 'quill');
   });
 
-let stageOnChangeSelectors = [
+  let stageOnChangeSelectors = [
     '.prev-holder input',
     '.prev-holder select',
     '.prev-holder textarea'
@@ -1258,7 +1307,7 @@ let stageOnChangeSelectors = [
       }
     } else {
       let fieldVal = document.getElementById('value-' + field.id);
-      if(fieldVal) {
+      if (fieldVal) {
         fieldVal.value = e.target.value;
       }
     }
@@ -1271,7 +1320,7 @@ let stageOnChangeSelectors = [
     if (!e.target.classList.contains('fld-label')) return;
     let value = e.target.value || e.target.innerHTML;
     let label = utils.closest(e.target, '.form-field')
-    .querySelector('.field-label');
+      .querySelector('.field-label');
     label.innerHTML = utils.parsedHtml(value);
   });
 
@@ -1287,7 +1336,8 @@ let stageOnChangeSelectors = [
     let ttVal = $(e.target).val();
     if (ttVal !== '') {
       if (!closestToolTip.length) {
-        let tt = `<span class="tooltip-element" tooltip="${ttVal}">?</span>`;
+        let tt =
+          `<span class="tooltip-element" tooltip="${ttVal}">?</span>`;
         $('.field-label', $field).after(tt);
       } else {
         closestToolTip.attr('tooltip', ttVal).css('display', 'inline-block');
@@ -1306,7 +1356,8 @@ let stageOnChangeSelectors = [
    */
   $stage.on('change', '.fld-multiple', e => {
     let newType = e.target.checked ? 'checkbox' : 'radio';
-    let $options = $('.option-selected', $(e.target).closest('.form-elements'));
+    let $options = $('.option-selected', $(e.target).closest(
+      '.form-elements'));
     $options.each(i => $options[i].type = newType);
     return newType;
   });
@@ -1316,8 +1367,8 @@ let stageOnChangeSelectors = [
     e.target.value = utils.safename(e.target.value);
     if (e.target.value === '') {
       $(e.target)
-      .addClass('field-error')
-      .attr('placeholder', i18n.cannotBeEmpty);
+        .addClass('field-error')
+        .attr('placeholder', i18n.cannotBeEmpty);
     } else {
       $(e.target).removeClass('field-error');
     }
@@ -1344,9 +1395,9 @@ let stageOnChangeSelectors = [
     const buttonPosition = e.target.getBoundingClientRect();
     const bodyRect = document.body.getBoundingClientRect();
     const coords = {
-        pageX: buttonPosition.left + (buttonPosition.width / 2),
-        pageY: (buttonPosition.top - bodyRect.top) - 12
-      };
+      pageX: buttonPosition.left + (buttonPosition.width / 2),
+      pageY: (buttonPosition.top - bodyRect.top) - 12
+    };
 
     let deleteID = $(e.target).parents('.form-field:eq(0)').attr('id');
     const $field = $(document.getElementById(deleteID));
@@ -1412,7 +1463,7 @@ let stageOnChangeSelectors = [
     let name = $firstOption.attr('name');
 
     $('.sortable-options', $optionWrap)
-    .append(selectFieldOptions(name, false, isMultiple));
+      .append(selectFieldOptions(name, false, isMultiple));
   });
 
   $stage.on('mouseover mouseout', '.remove, .del-button', e =>
@@ -1428,7 +1479,8 @@ let stageOnChangeSelectors = [
   }
 
   if (opts.disableInjectedStyle) {
-    const styleTags = document.getElementsByClassName('formBuilder-injected-style');
+    const styleTags = document.getElementsByClassName(
+      'formBuilder-injected-style');
     utils.forEach(styleTags, i => remove(styleTags[i]));
   }
 
@@ -1464,13 +1516,15 @@ let stageOnChangeSelectors = [
 };
 
 
-(function( $ ) {
+(function($) {
   $.fn.formBuilder = function(options) {
     if (!options) {
       options = {};
     }
     let elems = this;
-    let {i18n, ...opts} = $.extend({}, defaultOptions, options, true);
+    let {
+      i18n, ...opts
+    } = $.extend({}, defaultOptions, options, true);
     config.opts = opts;
     let i18nOpts = $.extend({}, defaultI18n, i18n, true);
     let instance = {
@@ -1502,4 +1556,4 @@ let stageOnChangeSelectors = [
 
     return instance;
   };
-})( jQuery );
+})(jQuery);
