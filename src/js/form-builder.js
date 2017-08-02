@@ -148,6 +148,7 @@ const FormBuilder = function(opts, element) {
     beforeStop: (evt, ui) => h.beforeStop.call(h, evt, ui),
     start: (evt, ui) => h.startMoving.call(h, evt, ui),
     stop: (evt, ui) => h.stopMoving.call(h, evt, ui),
+    items: '> li:not(.unsortable)',
     cancel: [
       'input',
       'select',
@@ -241,12 +242,23 @@ const FormBuilder = function(opts, element) {
     cbWrap.appendChild(formActions);
   }
 
-  let stageWrap = m('div', [d.stage, cbWrap], {
+  let els = [d.stage];
+  let stagewrapClass = 'stage-wrap ';
+  if (!opts.hideControls) {
+    els.push(cbWrap);
+    stagewrapClass += data.layout.stage;
+  }
+
+  let stageWrap = m('div', els, {
     id: `${data.formID}-stage-wrap`,
-    className: 'stage-wrap ' + data.layout.stage
+    className: stagewrapClass
   });
 
-  $editorWrap.append(stageWrap, cbWrap);
+  if (!opts.hideControls) {
+    $editorWrap.append(stageWrap, cbWrap);
+  } else {
+    $editorWrap.append(stageWrap);
+  }
 
   if (element.type !== 'textarea') {
     $(element).append($editorWrap);
@@ -1094,8 +1106,10 @@ const FormBuilder = function(opts, element) {
     liContents += '</div>';
     liContents += '</div>';
 
+    values.class = values.class || '';
+
     let field = m('li', liContents, {
-      'class': type + '-field form-field',
+      'class': type + '-field form-field ' + values.class,
       'type': type,
       id: data.lastID
     });
@@ -1263,6 +1277,9 @@ const FormBuilder = function(opts, element) {
     }
   });
   $stage.on('dblclick', 'li.form-field, .field-label', (e) => {
+    if (e.target.tagName.toLowerCase() === 'input' || e.target.contentEditable) {
+      return;
+    }
     e.stopPropagation();
     e.preventDefault();
     if (e.handled !== true) {

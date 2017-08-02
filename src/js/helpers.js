@@ -3,12 +3,19 @@ import {
   empty,
   optionFieldsRegEx,
   remove
-} from './dom';
-import {instanceData} from './data';
+}
+from './dom';
+import {
+  instanceData
+}
+from './data';
 import utils from './utils';
 import events from './events';
 import mi18n from 'mi18n';
-import {config} from './config';
+import {
+  config
+}
+from './config';
 import control from './control';
 import controlCustom from './control/custom';
 
@@ -17,7 +24,8 @@ const m = utils.markup;
 /**
  * Utilities specific to form-builder.js
  */
-export default class Helpers {
+export
+default class Helpers {
   /**
    * Setup defaults, get instance data and dom
    * @param  {String} formID [description]
@@ -75,7 +83,6 @@ export default class Helpers {
     let lastIndex = form.childNodes.length - 1;
     let cancelArray = [];
     _this.stopIndex = ui.placeholder.index() - 1;
-
     if (!opts.sortableControls && ui.item.parent().hasClass('frmb-control')) {
       cancelArray.push(true);
     }
@@ -100,8 +107,8 @@ export default class Helpers {
    */
   getTypes($field) {
     let types = {
-        type: $field.attr('type')
-      };
+      type: $field.attr('type') || $field.attr('data-type')
+    };
     let subtype = $('.fld-subtype', $field).val();
 
     if (subtype !== types.type) {
@@ -124,9 +131,9 @@ export default class Helpers {
       let $option = $($options[i]);
       const selected = $('.option-selected', $option).is(':checked');
       let attrs = {
-          label: $('.option-label', $option).val(),
-          value: $('.option-value', $option).val()
-        };
+        label: $('.option-label', $option).val(),
+        value: $('.option-value', $option).val()
+      };
 
       if (selected) {
         attrs.selected = selected;
@@ -196,7 +203,7 @@ export default class Helpers {
           let fieldData = _this.getTypes($field);
           let $roleInputs = $('.roles-field:checked', field);
           let roleVals = $roleInputs
-          .map(index => $roleInputs[index].value).get();
+            .map(index => $roleInputs[index].value).get();
 
           _this.setAttrVals(field, fieldData);
 
@@ -208,7 +215,7 @@ export default class Helpers {
                 const data = instance.getContents();
                 fieldData.value = window.JSON.stringify(data.ops);
               }
-            } else if(fieldData.subtype === 'tinymce' && window.tinymce) {
+            } else if (fieldData.subtype === 'tinymce' && window.tinymce) {
               let id = `${fieldData.name}-preview`;
               if (window.tinymce.editors[id]) {
                 let editor = window.tinymce.editors[id];
@@ -280,13 +287,13 @@ export default class Helpers {
   save(stage) {
     let _this = this;
     let data = this.data;
-    if(!stage) {
+    if (!stage) {
       stage = this.d.stage;
     }
     let doSave = {
       xml: () => _this.xmlSave(stage),
       json: () =>
-      window.JSON.stringify(_this.prepData(stage), null, '\t')
+        window.JSON.stringify(_this.prepData(stage), null, '\t')
     };
 
     // save action for current `dataType`
@@ -381,7 +388,8 @@ export default class Helpers {
 
     // determine the control class for this type, and then process it through the layout engine
     let custom = controlCustom.lookup(previewData.type);
-    let controlClass = custom ? custom.class : control.getClass(previewData.type, previewData.subtype);
+    let controlClass = custom ? custom.class : control.getClass(previewData.type,
+      previewData.subtype);
     preview = this.layout.build(controlClass, previewData);
 
     empty($prevHolder[0]);
@@ -408,9 +416,13 @@ export default class Helpers {
       let title = mi18n.get('fieldNonEditable');
 
       if (title) {
-        let tt = utils.markup('p', title, {className: 'frmb-tt'});
+        let tt = utils.markup('p', title, {
+          className: 'frmb-tt'
+        });
         field.appendChild(tt);
-        field.addEventListener('mousemove', e => move(e, {tt, field}));
+        field.addEventListener('mousemove', e => move(e, {
+          tt, field
+        }));
       }
     });
   }
@@ -543,11 +555,15 @@ export default class Helpers {
       _this.closeConfirm(overlay);
     };
 
-    let btnWrap = m('div', [no, yes], {className: 'button-wrap'});
+    let btnWrap = m('div', [no, yes], {
+      className: 'button-wrap'
+    });
 
     className = 'form-builder-dialog ' + className;
 
-    let miniModal = m('div', [message, btnWrap], {className});
+    let miniModal = m('div', [message, btnWrap], {
+      className
+    });
     if (!coords) {
       const dE = document.documentElement;
       coords = {
@@ -583,7 +599,9 @@ export default class Helpers {
 
     className = 'form-builder-dialog ' + className;
 
-    let miniModal = utils.markup('div', content, {className: className});
+    let miniModal = utils.markup('div', content, {
+      className: className
+    });
     if (!coords) {
       coords = {
         pageX: Math.max(clientWidth, window.innerWidth || 0) / 2,
@@ -690,7 +708,9 @@ export default class Helpers {
     if (!config.opts.sortableControls) {
       return false;
     }
-    const {sessionStorage, JSON} = window;
+    const {
+      sessionStorage, JSON
+    } = window;
 
     let fieldOrder = [];
 
@@ -745,14 +765,16 @@ export default class Helpers {
         let baseFieldIndex = fieldOrder.indexOf(field.replace(randomKey, ''));
         if (baseFieldIndex !== -1) {
           fieldOrder.splice(fieldOrder.indexOf(field), 1);
-          fieldOrder.splice(baseFieldIndex + 1, fieldOrder.indexOf(field), field);
+          fieldOrder.splice(baseFieldIndex + 1, fieldOrder.indexOf(field),
+            field);
         }
       }
     });
 
     // remove disableFields
     if (opts.disableFields.length) {
-      fieldOrder = fieldOrder.filter(type => opts.disableFields.indexOf(type) == -1);
+      fieldOrder = fieldOrder.filter(type => opts.disableFields.indexOf(type) ==
+        -1);
     }
 
     return fieldOrder.filter(Boolean);
@@ -814,8 +836,7 @@ export default class Helpers {
         left: cbPosition.left
       };
 
-      let offset = Object.assign(
-        {},
+      let offset = Object.assign({},
         offsetDefaults,
         config.opts.stickyControls.offset
       );
@@ -921,7 +942,9 @@ export default class Helpers {
    * @return {Object} DOM element for action button
    */
   processActionButtons(buttonData) {
-    let {label, events, ...attrs} = buttonData;
+    let {
+      label, events, ...attrs
+    } = buttonData;
     let data = this.data;
     if (!label) {
       if (attrs.id) {
@@ -998,9 +1021,9 @@ export default class Helpers {
     let d = this.d;
     let data = this.data;
     d.stage = m('ul', null, {
-        id: data.formID,
-        className: 'frmb'
-      });
+      id: data.formID,
+      className: 'frmb'
+    });
 
     // Create draggable fields for formBuilder
     d.controls = m('ul', null, {
@@ -1016,7 +1039,9 @@ export default class Helpers {
    */
   processOptions(options) {
     const _this = this;
-    let {actionButtons, ...opts} = options;
+    let {
+      actionButtons, ...opts
+    } = options;
     actionButtons = [{
       type: 'button',
       id: 'clear',
@@ -1043,7 +1068,9 @@ export default class Helpers {
         }
       }
     }].concat(options.actionButtons);
-    config.opts = Object.assign({}, {actionButtons}, opts);
+    config.opts = Object.assign({}, {
+      actionButtons
+    }, opts);
     return config.opts;
   }
 
