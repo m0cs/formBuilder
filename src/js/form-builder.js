@@ -242,23 +242,17 @@ const FormBuilder = function(opts, element) {
     cbWrap.appendChild(formActions);
   }
 
-  let els = [d.stage];
   let stagewrapClass = 'stage-wrap ';
   if (!opts.hideControls) {
-    els.push(cbWrap);
     stagewrapClass += data.layout.stage;
   }
 
-  let stageWrap = m('div', els, {
+  let stageWrap = m('div', [d.stage, cbWrap], {
     id: `${data.formID}-stage-wrap`,
     className: stagewrapClass
   });
 
-  if (!opts.hideControls) {
-    $editorWrap.append(stageWrap, cbWrap);
-  } else {
-    $editorWrap.append(stageWrap);
-  }
+  $editorWrap.append(stageWrap, cbWrap);
 
   if (element.type !== 'textarea') {
     $(element).append($editorWrap);
