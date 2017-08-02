@@ -728,10 +728,15 @@ const FormBuilder = function(opts, element) {
         let orig = i18n[attribute];
         let tUA = typeUserAttr[attribute];
         let origValue = tUA.value;
-        tUA.value = values[attribute] || tUA.value || '';
+        tUA.value = (values[attribute] !== undefined) ? values[attribute] :
+          (tUA.value !== undefined ? tUA.value : '');
 
         if (tUA.label) {
           i18n[attribute] = tUA.label;
+        }
+
+        if (tUA.type === 'checkbox' && tUA.value === true) {
+          tUA.checked = tUA.value;
         }
 
         if (tUA.options) {
