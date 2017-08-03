@@ -737,6 +737,8 @@ const FormBuilder = function(opts, element) {
 
         if (tUA.type === 'checkbox' && tUA.value === true) {
           tUA.checked = tUA.value;
+        } else {
+          delete tUA.checked;
         }
 
         if (tUA.options) {
