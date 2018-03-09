@@ -1173,7 +1173,7 @@ const FormBuilder = function(opts, element) {
           type: optionInputType[prop] || 'text',
           className: 'option-' + prop,
           value: optionData[prop],
-          name: name + '-option'
+          name: name.includes('-option') ? name : name + '-option'
         };
 
         attrs.placeholder = i18n[`placeholder.${prop}`] || '';
