@@ -98,7 +98,7 @@ class FormRender {
           fields = [fields]
         }
         let renderedFormWrap = utils.markup('div', fields, {
-          className: 'rendered-form',
+          className: 'main-form-builder rendered-form',
         })
         this.appendChild(renderedFormWrap)
         fields.forEach(field => {

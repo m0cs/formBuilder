@@ -137,6 +137,7 @@ const FormBuilder = function(opts, element) {
     beforeStop: (evt, ui) => h.beforeStop.call(h, evt, ui),
     start: (evt, ui) => h.startMoving.call(h, evt, ui),
     stop: (evt, ui) => h.stopMoving.call(h, evt, ui),
+    items: '> li:not(.unsortable)',
     cancel: ['input', 'select', 'textarea', '.disabled-field', '.form-elements', '.btn', 'button'].join(', '),
     placeholder: 'frmb-placeholder',
   })
@@ -197,7 +198,7 @@ const FormBuilder = function(opts, element) {
 
   d.editorWrap = m('div', null, {
     id: `${data.formID}-form-wrap`,
-    className: 'form-wrap form-builder' + utils.mobileClass(),
+    className: 'form-wrap main-form-builder form-builder' + utils.mobileClass(),
   })
 
   let $editorWrap = $(d.editorWrap)
@@ -220,12 +221,17 @@ const FormBuilder = function(opts, element) {
     cbWrap.appendChild(formActions)
   }
 
+  let stagewrapClass = 'stage-wrap ';
+  if (!opts.hideControls) {
+    stagewrapClass += data.layout.stage;
+  }
+
   let stageWrap = m('div', [d.stage, cbWrap], {
     id: `${data.formID}-stage-wrap`,
-    className: 'stage-wrap ' + data.layout.stage,
+    className: stagewrapClass
   })
 
-  $editorWrap.append(stageWrap, cbWrap)
+  $editorWrap.append(stageWrap, cbWrap);
 
   if (element.type !== 'textarea') {
     $(element).append($editorWrap)
@@ -613,10 +619,17 @@ const FormBuilder = function(opts, element) {
         let orig = i18n[attribute]
         let tUA = typeUserAttr[attribute]
         let origValue = tUA.value
-        tUA.value = values[attribute] || tUA.value || ''
+        tUA.value = (values[attribute] !== undefined) ? values[attribute] :
+          (tUA.value !== undefined ? tUA.value : '');
 
         if (tUA.label) {
           i18n[attribute] = tUA.label
+        }
+
+        if (tUA.type === 'checkbox' && tUA.value === true) {
+            tUA.checked = tUA.value;
+        } else {
+          delete tUA.checked;
         }
 
         if (tUA.options) {
@@ -973,8 +986,10 @@ const FormBuilder = function(opts, element) {
     })
     liContents.push(m('div', formElements, { id: `${data.lastID}-holder`, className: 'frm-holder' }))
 
+    values.class = values.class || '';
+
     let field = m('li', liContents, {
-      class: type + '-field form-field',
+      class: type + '-field form-field ' + values.class,
       type: type,
       id: data.lastID,
     })
@@ -1026,7 +1041,7 @@ const FormBuilder = function(opts, element) {
           type: optionInputType[prop] || 'text',
           className: 'option-' + prop,
           value: optionData[prop],
-          name: name + '-option',
+          name: name.includes('-option') ? name : name + '-option'
         }
 
         attrs.placeholder = i18n[`placeholder.${prop}`] || ''
@@ -1134,7 +1149,7 @@ const FormBuilder = function(opts, element) {
   })
   $stage.on('dblclick', 'li.form-field, .field-label', e => {
     if (e.target.tagName.toLowerCase() === 'input' || e.target.contentEditable) {
-      return
+      return;
     }
     e.stopPropagation()
     e.preventDefault()
