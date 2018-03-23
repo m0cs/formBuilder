@@ -221,6 +221,8 @@ textarea.form-control {
 .fb-checkbox-group {
   .checkbox,
   .checkbox-inline{
+    display: inline-block;
+    width: 100%;
     padding-left: 0;
     input {
       position:relative;
@@ -228,19 +230,23 @@ textarea.form-control {
     }
     label {
       padding-left: 4px;
+      width: auto;
     }
   }
 }
 
 .fb-radio-group {
   .radio, .radio-inline{
-    padding-left: 0;
+    display: inline-block;
+    width: 100%;
+    padding-left: 1px;
     input {
       position:relative;
       margin: 4px 0 0;
     }
     label {
       padding-left: 4px;
+      width: auto;
     }
   }
 }

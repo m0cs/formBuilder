@@ -198,7 +198,7 @@ const FormBuilder = function(opts, element) {
 
   d.editorWrap = m('div', null, {
     id: `${data.formID}-form-wrap`,
-    className: 'form-wrap main-form-builder form-builder' + utils.mobileClass(),
+    className: 'main-form-builder form-wrap form-builder' + utils.mobileClass(),
   })
 
   let $editorWrap = $(d.editorWrap)
